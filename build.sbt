@@ -2,14 +2,14 @@ import sbt.Keys._
 import sbt._
 import sbtrelease.Version
 
-name := "hello"
+name := "t99-analytics"
 
 resolvers += Resolver.sonatypeRepo("public")
 scalaVersion := "2.12.8"
 releaseNextVersion := { ver =>
   Version(ver).map(_.bumpMinor.string).getOrElse("Error")
 }
-assemblyJarName in assembly := "hello.jar"
+assemblyJarName in assembly := "t99.jar"
 
 libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-lambda-java-events" % "2.2.5",
