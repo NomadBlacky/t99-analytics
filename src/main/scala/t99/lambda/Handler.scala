@@ -1,4 +1,4 @@
-package hello
+package t99.lambda
 
 import com.amazonaws.services.lambda.runtime.{Context, RequestHandler}
 import scala.collection.JavaConverters

@@ -1,5 +1,4 @@
-package hello
-
+package t99.lambda
 import scala.beans.BeanProperty
 
 case class ApiGatewayResponse(@BeanProperty statusCode: Integer, @BeanProperty body: String,
