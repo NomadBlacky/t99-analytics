@@ -54,10 +54,8 @@ functions:
       - http:
           path: execute
           method: post
-
-#    Define function environment variables here
-#    environment:
-#      variable2: value2
+    environment:
+      AUTH_TOKEN: ${env:T99_AUTH_TOKEN}
 
 # you can add CloudFormation resource templates here
 #resources:
