@@ -51,7 +51,7 @@ package:
 
 functions:
   hello:
-    handler: hello.ApiGatewayHandler
+    handler: t99.lambda.Handler
     events:
       - http:
           path: execute
