@@ -2,9 +2,9 @@ package t99.lambda
 
 import java.util
 
+import com.amazonaws.services.lambda.runtime.events.{APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent}
 import com.amazonaws.services.lambda.runtime.{Context, RequestHandler}
 
-import scala.beans.BeanProperty
 import scala.collection.JavaConverters
 
 class Handler(private val validAuthToken: String) extends RequestHandler[Request, Response] {
@@ -15,38 +15,43 @@ class Handler(private val validAuthToken: String) extends RequestHandler[Request
   def this() = this(sys.env("AUTH_TOKEN"))
 
   def handleRequest(input: Request, context: Context): Response = {
-    if (input.authToken != validAuthToken) {
+    context.getLogger.log(input.toString)
+
+    val bodyJson  = ujson.read(input.getBody)
+    val authToken = bodyJson("auth_token").str
+
+    if (authToken != validAuthToken) {
       Response(
         401,
         "Invalid token",
-        new util.HashMap(),
-        base64Encoded = true
+        new util.HashMap()
       )
     } else {
-      handleInternal(input, context)
+      handleInternal(bodyJson, context)
     }
   }
 
-  private def handleInternal(input: Request, context: Context): Response = {
+  private def handleInternal(bodyJson: ujson.Value, context: Context): Response = {
     val headers = Map("x-custom-response-header" -> "my custom response header value")
     Response(
       200,
       "Go Serverless v1.0! Your function executed successfully!",
-      JavaConverters.mapAsJavaMap[String, Object](headers),
-      base64Encoded = true
+      JavaConverters.mapAsJavaMap(headers),
     )
   }
 }
 
-class Request(
-    @BeanProperty var authToken: String
-) {
+case class Request(body: String) extends APIGatewayProxyRequestEvent {
   def this() = this("")
+  setBody(body)
 }
 
 case class Response(
-    @BeanProperty statusCode: Integer,
-    @BeanProperty body: String,
-    @BeanProperty headers: java.util.Map[String, Object],
-    @BeanProperty base64Encoded: Boolean = false
-)
+    statusCode: Integer,
+    body: String,
+    headers: java.util.Map[String, String],
+) extends APIGatewayProxyResponseEvent {
+  setStatusCode(statusCode)
+  setBody(body)
+  setHeaders(headers)
+}
