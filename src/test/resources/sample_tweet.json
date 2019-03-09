@@ -1,0 +1,236 @@
+{
+  "created_at": "Fri Mar 08 16:32:11 +0000 2019",
+  "id": 1104057231635431424,
+  "id_str": "1104057231635431424",
+  "text": "#Tetris99 #Tetris #NintendoSwitch https://t.co/iAGvyEQyB5",
+  "truncated": false,
+  "entities": {
+    "hashtags": [
+      {
+        "text": "Tetris99",
+        "indices": [
+          0,
+          9
+        ]
+      },
+      {
+        "text": "Tetris",
+        "indices": [
+          10,
+          17
+        ]
+      },
+      {
+        "text": "NintendoSwitch",
+        "indices": [
+          18,
+          33
+        ]
+      }
+    ],
+    "symbols": [
+
+    ],
+    "user_mentions": [
+
+    ],
+    "urls": [
+
+    ],
+    "media": [
+      {
+        "id": 1104057229639004160,
+        "id_str": "1104057229639004160",
+        "indices": [
+          34,
+          57
+        ],
+        "media_url": "http://pbs.twimg.com/media/D1JmM2hVsAAxA4O.jpg",
+        "media_url_https": "https://pbs.twimg.com/media/D1JmM2hVsAAxA4O.jpg",
+        "url": "https://t.co/iAGvyEQyB5",
+        "display_url": "pic.twitter.com/iAGvyEQyB5",
+        "expanded_url": "https://twitter.com/blac_k_ey/status/1104057231635431424/photo/1",
+        "type": "photo",
+        "sizes": {
+          "thumb": {
+            "w": 150,
+            "h": 150,
+            "resize": "crop"
+          },
+          "large": {
+            "w": 1280,
+            "h": 720,
+            "resize": "fit"
+          },
+          "small": {
+            "w": 680,
+            "h": 383,
+            "resize": "fit"
+          },
+          "medium": {
+            "w": 1200,
+            "h": 675,
+            "resize": "fit"
+          }
+        }
+      }
+    ]
+  },
+  "extended_entities": {
+    "media": [
+      {
+        "id": 1104057229639004160,
+        "id_str": "1104057229639004160",
+        "indices": [
+          34,
+          57
+        ],
+        "media_url": "http://pbs.twimg.com/media/D1JmM2hVsAAxA4O.jpg",
+        "media_url_https": "https://pbs.twimg.com/media/D1JmM2hVsAAxA4O.jpg",
+        "url": "https://t.co/iAGvyEQyB5",
+        "display_url": "pic.twitter.com/iAGvyEQyB5",
+        "expanded_url": "https://twitter.com/blac_k_ey/status/1104057231635431424/photo/1",
+        "type": "photo",
+        "sizes": {
+          "thumb": {
+            "w": 150,
+            "h": 150,
+            "resize": "crop"
+          },
+          "large": {
+            "w": 1280,
+            "h": 720,
+            "resize": "fit"
+          },
+          "small": {
+            "w": 680,
+            "h": 383,
+            "resize": "fit"
+          },
+          "medium": {
+            "w": 1200,
+            "h": 675,
+            "resize": "fit"
+          }
+        }
+      },
+      {
+        "id": 1104057229596975104,
+        "id_str": "1104057229596975104",
+        "indices": [
+          34,
+          57
+        ],
+        "media_url": "http://pbs.twimg.com/media/D1JmM2XUYAABN9B.jpg",
+        "media_url_https": "https://pbs.twimg.com/media/D1JmM2XUYAABN9B.jpg",
+        "url": "https://t.co/iAGvyEQyB5",
+        "display_url": "pic.twitter.com/iAGvyEQyB5",
+        "expanded_url": "https://twitter.com/blac_k_ey/status/1104057231635431424/photo/1",
+        "type": "photo",
+        "sizes": {
+          "thumb": {
+            "w": 150,
+            "h": 150,
+            "resize": "crop"
+          },
+          "large": {
+            "w": 1280,
+            "h": 720,
+            "resize": "fit"
+          },
+          "small": {
+            "w": 680,
+            "h": 383,
+            "resize": "fit"
+          },
+          "medium": {
+            "w": 1200,
+            "h": 675,
+            "resize": "fit"
+          }
+        }
+      }
+    ]
+  },
+  "source": "<a href=\"https://www.nintendo.com/countryselector\" rel=\"nofollow\">Nintendo Switch Share</a>",
+  "in_reply_to_status_id": null,
+  "in_reply_to_status_id_str": null,
+  "in_reply_to_user_id": null,
+  "in_reply_to_user_id_str": null,
+  "in_reply_to_screen_name": null,
+  "user": {
+    "id": 760886820158570496,
+    "id_str": "760886820158570496",
+    "name": "t.kadowaki",
+    "screen_name": "blac_k_ey",
+    "location": "",
+    "description": "エンジニアのためのエンジニアリングをしたい🤔 すき 👉 Scala / Logging / Monitoring / Ubuntu / KDE / Progressive (House|Trance) / Tetris\nEnglish: @blac_k_ey_en",
+    "url": "https://t.co/hZoLLAsn2Y",
+    "entities": {
+      "url": {
+        "urls": [
+          {
+            "url": "https://t.co/hZoLLAsn2Y",
+            "expanded_url": "http://github.com/NomadBlacky",
+            "display_url": "github.com/NomadBlacky",
+            "indices": [
+              0,
+              23
+            ]
+          }
+        ]
+      },
+      "description": {
+        "urls": [
+
+        ]
+      }
+    },
+    "protected": false,
+    "followers_count": 289,
+    "friends_count": 543,
+    "listed_count": 5,
+    "created_at": "Wed Aug 03 17:15:29 +0000 2016",
+    "favourites_count": 1653,
+    "utc_offset": null,
+    "time_zone": null,
+    "geo_enabled": false,
+    "verified": false,
+    "statuses_count": 7611,
+    "lang": "ja",
+    "contributors_enabled": false,
+    "is_translator": false,
+    "is_translation_enabled": false,
+    "profile_background_color": "000000",
+    "profile_background_image_url": "http://abs.twimg.com/images/themes/theme1/bg.png",
+    "profile_background_image_url_https": "https://abs.twimg.com/images/themes/theme1/bg.png",
+    "profile_background_tile": false,
+    "profile_image_url": "http://pbs.twimg.com/profile_images/910450846835499008/HDSngrU-_normal.jpg",
+    "profile_image_url_https": "https://pbs.twimg.com/profile_images/910450846835499008/HDSngrU-_normal.jpg",
+    "profile_banner_url": "https://pbs.twimg.com/profile_banners/760886820158570496/1497927048",
+    "profile_link_color": "000000",
+    "profile_sidebar_border_color": "000000",
+    "profile_sidebar_fill_color": "000000",
+    "profile_text_color": "000000",
+    "profile_use_background_image": false,
+    "has_extended_profile": true,
+    "default_profile": false,
+    "default_profile_image": false,
+    "following": false,
+    "follow_request_sent": false,
+    "notifications": false,
+    "translator_type": "none"
+  },
+  "geo": null,
+  "coordinates": null,
+  "place": null,
+  "contributors": null,
+  "is_quote_status": false,
+  "retweet_count": 0,
+  "favorite_count": 0,
+  "favorited": false,
+  "retweeted": false,
+  "possibly_sensitive": false,
+  "possibly_sensitive_appealable": false,
+  "lang": "und"
+}
