@@ -5,8 +5,6 @@ import com.amazonaws.services.lambda.runtime.{ClientContext, CognitoIdentity, Co
 import org.scalatest.{FunSpec, MustMatchers}
 import org.scalatestplus.mockito.MockitoSugar
 
-import scala.collection.JavaConverters
-
 class HandlerSpec extends FunSpec with MustMatchers with MockitoSugar {
 
   describe("handleRequest") {
@@ -15,27 +13,34 @@ class HandlerSpec extends FunSpec with MustMatchers with MockitoSugar {
 
     it("must return a 401 response when authToken is invalid") {
       val result = handler.handleRequest(
-        Request("""{"auth_token":"invalid token"}"""),
+        Request(
+          """{
+            |  "auth_token":"invalid token",
+            |  "tweet_url":"https://twitter.com/blac_k_ey/status/1104410671842713601"
+            |}
+          """.stripMargin
+        ),
         TestContext()
       )
-      val expect =
-        Response(401, "Invalid token", new util.HashMap())
+
+      val expect = Response(401, "Invalid token", new util.HashMap())
 
       result mustBe expect
     }
 
     it("must return a 200 response when authToken is valid") {
       val result = handler.handleRequest(
-        Request("""{"auth_token":"valid token"}"""),
+        Request(
+          """{
+            |  "auth_token":"valid token",
+            |  "tweet_url":"https://twitter.com/blac_k_ey/status/1104410671842713601"
+            |}
+          """.stripMargin
+        ),
         TestContext()
       )
-      val headers = Map("x-custom-response-header" -> "my custom response header value")
-      val expect =
-        Response(
-          200,
-          "Go Serverless v1.0! Your function executed successfully!",
-          JavaConverters.mapAsJavaMap(headers)
-        )
+
+      val expect = Response(200, "OK", new util.HashMap())
 
       result mustBe expect
     }
