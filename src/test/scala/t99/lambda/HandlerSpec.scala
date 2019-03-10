@@ -1,17 +1,24 @@
 package t99.lambda
+import java.awt.image.BufferedImage
 import java.util
 
 import com.amazonaws.services.lambda.runtime.{ClientContext, CognitoIdentity, Context, LambdaLogger}
-import org.scalatest.{FunSpec, MustMatchers}
+import org.mockito.ArgumentMatchers._
+import org.mockito.Mockito._
+import org.scalatest.{AsyncFunSpec, MustMatchers}
 import org.scalatestplus.mockito.MockitoSugar
+import t99.twitter.TwitterClient
+import t99.twitter.model.Tweet
 
-class HandlerSpec extends FunSpec with MustMatchers with MockitoSugar {
+import scala.concurrent.Future
+
+class HandlerSpec extends AsyncFunSpec with MustMatchers with MockitoSugar {
 
   describe("handleRequest") {
 
-    val handler = new Handler("valid token")
-
     it("must return a 401 response when authToken is invalid") {
+      val handler = new Handler("valid token", mock[TwitterClient])
+
       val result = handler.handleRequest(
         Request(
           """{
@@ -28,7 +35,18 @@ class HandlerSpec extends FunSpec with MustMatchers with MockitoSugar {
       result mustBe expect
     }
 
-    it("must return a 200 response when authToken is valid") {
+    it("must return a 200 response with image count when authToken is valid") {
+      val handler = {
+        val mockTwitterClient = mock[TwitterClient]
+        when(mockTwitterClient.getTweet(any())(any())).thenReturn {
+          Future.successful(mock[Tweet])
+        }
+        when(mockTwitterClient.getImages(any())(any())).thenReturn {
+          Future.successful(Seq(mock[BufferedImage], mock[BufferedImage]))
+        }
+        new Handler("valid token", mockTwitterClient)
+      }
+
       val result = handler.handleRequest(
         Request(
           """{
@@ -40,7 +58,7 @@ class HandlerSpec extends FunSpec with MustMatchers with MockitoSugar {
         TestContext()
       )
 
-      val expect = Response(200, "OK", new util.HashMap())
+      val expect = Response(200, "2", new util.HashMap())
 
       result mustBe expect
     }

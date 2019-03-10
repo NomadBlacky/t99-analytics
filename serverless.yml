@@ -56,6 +56,10 @@ functions:
           method: post
     environment:
       AUTH_TOKEN: ${env:T99_AUTH_TOKEN}
+      TWITTER_CONSUMER_KEY: ${env:T99_TWITTER_CONSUMER_KEY}
+      TWITTER_CONSUMER_SECRET: ${env:T99_TWITTER_CONSUMER_SECRET}
+      TWITTER_ACCESS_KEY: ${env:T99_TWITTER_ACCESS_KEY}
+      TWITTER_ACCESS_SECRET: ${env:T99_TWITTER_ACCESS_SECRET}
 
 # you can add CloudFormation resource templates here
 #resources:
