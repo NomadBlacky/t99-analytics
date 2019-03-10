@@ -5,11 +5,13 @@ import utils.SnakePickle
 
 import scala.util.Try
 
-case class Request(body: String) extends APIGatewayProxyRequestEvent {
-  def this() = this("")
-  setBody(body)
-
-  lazy val parsedBody: Try[RequestBody] = Try(SnakePickle.read[RequestBody](body))
+object RequestHelper {
+  implicit class RichAPIGatewayProxyRequestEvent(event: APIGatewayProxyRequestEvent) {
+    lazy val parsedBody: Try[RequestBody] = {
+      println(s"body: ${event.getBody}")
+      Try(SnakePickle.read[RequestBody](event.getBody))
+    }
+  }
 }
 
 case class RequestBody(authToken: String, tweetUrl: String) {

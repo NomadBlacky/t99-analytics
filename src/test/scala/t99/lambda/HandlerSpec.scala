@@ -2,6 +2,7 @@ package t99.lambda
 import java.awt.image.BufferedImage
 import java.util
 
+import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent
 import com.amazonaws.services.lambda.runtime.{ClientContext, CognitoIdentity, Context, LambdaLogger}
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
@@ -18,17 +19,15 @@ class HandlerSpec extends AsyncFunSpec with MustMatchers with MockitoSugar {
 
     it("must return a 401 response when authToken is invalid") {
       val handler = new Handler("valid token", mock[TwitterClient])
+      val body =
+        """{
+          |  "auth_token":"invalid token",
+          |  "tweet_url":"https://twitter.com/blac_k_ey/status/1104410671842713601"
+          |}
+        """.stripMargin
+      val request = new APIGatewayProxyRequestEvent().withBody(body)
 
-      val result = handler.handleRequest(
-        Request(
-          """{
-            |  "auth_token":"invalid token",
-            |  "tweet_url":"https://twitter.com/blac_k_ey/status/1104410671842713601"
-            |}
-          """.stripMargin
-        ),
-        TestContext()
-      )
+      val result = handler.handleRequest(request, TestContext())
 
       val expect = Response(401, "Invalid token", new util.HashMap())
 
@@ -46,17 +45,15 @@ class HandlerSpec extends AsyncFunSpec with MustMatchers with MockitoSugar {
         }
         new Handler("valid token", mockTwitterClient)
       }
+      val body =
+        """{
+          |  "auth_token":"valid token",
+          |  "tweet_url":"https://twitter.com/blac_k_ey/status/1104410671842713601"
+          |}
+        """.stripMargin
+      val request = new APIGatewayProxyRequestEvent().withBody(body)
 
-      val result = handler.handleRequest(
-        Request(
-          """{
-            |  "auth_token":"valid token",
-            |  "tweet_url":"https://twitter.com/blac_k_ey/status/1104410671842713601"
-            |}
-          """.stripMargin
-        ),
-        TestContext()
-      )
+      val result = handler.handleRequest(request, TestContext())
 
       val expect = Response(200, "2", new util.HashMap())
 

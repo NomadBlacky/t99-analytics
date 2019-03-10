@@ -2,8 +2,10 @@ package t99.lambda
 
 import java.util
 
+import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent
 import com.amazonaws.services.lambda.runtime.{Context, RequestHandler}
 import scalaj.http.Token
+import t99.lambda.RequestHelper._
 import t99.twitter.TwitterClient
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -14,7 +16,7 @@ import scala.util.{Failure, Success}
 class Handler(
     private val validAuthToken: String,
     private val client: TwitterClient
-) extends RequestHandler[Request, Response] {
+) extends RequestHandler[APIGatewayProxyRequestEvent, Response] {
 
   /**
     * Default constructor for Lambda.
@@ -27,7 +29,7 @@ class Handler(
     )
   )
 
-  def handleRequest(input: Request, context: Context): Response = {
+  def handleRequest(input: APIGatewayProxyRequestEvent, context: Context): Response = {
     val logger = context.getLogger
     logger.log(input.toString)
 
