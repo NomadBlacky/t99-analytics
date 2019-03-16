@@ -6,20 +6,22 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent
 import com.amazonaws.services.lambda.runtime.{ClientContext, CognitoIdentity, Context, LambdaLogger}
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
-import org.scalatest.{AsyncFunSpec, MustMatchers}
+import org.scalatest.{AsyncFunSpec, Inside, MustMatchers}
 import org.scalatestplus.mockito.MockitoSugar
 import t99.rekognition.{DetectedTextResults, RekognitionClient, T99Image}
+import t99.results.T99ResultValue.KO
+import t99.results.{T99Result, T99ResultExtractor}
 import t99.twitter.TwitterClient
 import t99.twitter.model.Tweet
 
 import scala.concurrent.Future
 
-class HandlerSpec extends AsyncFunSpec with MustMatchers with MockitoSugar {
+class HandlerSpec extends AsyncFunSpec with MustMatchers with MockitoSugar with Inside {
 
   describe("handleRequest") {
 
     it("must return a 401 response when authToken is invalid") {
-      val handler = new Handler("valid token", mock[TwitterClient], mock[RekognitionClient])
+      val handler = new Handler("valid token", mock[TwitterClient], mock[RekognitionClient], mock[T99ResultExtractor])
       val body =
         """{
           |  "auth_token":"invalid token",
@@ -37,12 +39,15 @@ class HandlerSpec extends AsyncFunSpec with MustMatchers with MockitoSugar {
 
     it("must return a 200 response when authToken is valid") {
       val handler = {
-        val mockTwitterClient = mock[TwitterClient]
-        when(mockTwitterClient.getTweet(any())(any())).thenReturn {
-          Future.successful(mock[Tweet])
-        }
-        when(mockTwitterClient.getImages(any())(any())).thenReturn {
-          Future.successful(Seq(mock[T99Image], mock[T99Image]))
+        val mockTwitterClient = {
+          val m = mock[TwitterClient]
+          when(m.getTweet(any())(any())).thenReturn {
+            Future.successful(mock[Tweet])
+          }
+          when(m.getImages(any())(any())).thenReturn {
+            Future.successful(Seq(mock[T99Image], mock[T99Image]))
+          }
+          m
         }
         val mockRekognitionClient = {
           val m       = mock[RekognitionClient]
@@ -51,7 +56,12 @@ class HandlerSpec extends AsyncFunSpec with MustMatchers with MockitoSugar {
           when(m.detectTexts(any())(any())).thenReturn(Future.successful(results))
           m
         }
-        new Handler("valid token", mockTwitterClient, mockRekognitionClient)
+        val mockExtractor = {
+          val m = mock[T99ResultExtractor]
+          when(m.extract(any())).thenReturn(T99Result(ko = Option(KO(20))))
+          m
+        }
+        new Handler("valid token", mockTwitterClient, mockRekognitionClient, mockExtractor)
       }
       val body =
         """{
@@ -63,9 +73,11 @@ class HandlerSpec extends AsyncFunSpec with MustMatchers with MockitoSugar {
 
       val result = handler.handleRequest(request, TestContext())
 
-      val expect = Response(200, "List(OK, OK)", new util.HashMap())
-
-      result mustBe expect
+      inside(result) {
+        case Response(statusCode, _, headers) =>
+          statusCode mustBe 200
+          headers mustBe new util.HashMap()
+      }
     }
   }
 }

@@ -8,6 +8,7 @@ import com.amazonaws.services.rekognition.AmazonRekognitionClientBuilder
 import scalaj.http.Token
 import t99.lambda.RequestHelper._
 import t99.rekognition.RekognitionClient
+import t99.results.T99ResultExtractor
 import t99.twitter.TwitterClient
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -18,7 +19,8 @@ import scala.util.{Failure, Success}
 class Handler(
     validAuthToken: String,
     twitterClient: TwitterClient,
-    rekognitionClient: RekognitionClient
+    rekognitionClient: RekognitionClient,
+    resultExtractor: T99ResultExtractor
 ) extends RequestHandler[APIGatewayProxyRequestEvent, Response] {
 
   /**
@@ -30,7 +32,8 @@ class Handler(
       Token(sys.env("TWITTER_CONSUMER_KEY"), sys.env("TWITTER_CONSUMER_SECRET")),
       Token(sys.env("TWITTER_ACCESS_KEY"), sys.env("TWITTER_ACCESS_SECRET"))
     ),
-    new RekognitionClient(AmazonRekognitionClientBuilder.defaultClient())
+    new RekognitionClient(AmazonRekognitionClientBuilder.defaultClient()),
+    new T99ResultExtractor
   )
 
   def handleRequest(input: APIGatewayProxyRequestEvent, context: Context): Response = {
@@ -65,11 +68,13 @@ class Handler(
 
   private def handleInternal(body: RequestBody, context: Context): Future[Response] =
     for {
-      tweet         <- twitterClient.getTweet(body.tweetId)
-      images        <- twitterClient.getImages(tweet)
-      detectedTexts <- Future.traverse(images)(rekognitionClient.detectTexts(_))
+      tweet           <- twitterClient.getTweet(body.tweetId)
+      images          <- twitterClient.getImages(tweet)
+      detectedResults <- Future.traverse(images)(rekognitionClient.detectTexts(_))
+      t99Results      <- Future.traverse(detectedResults)(r => Future.successful(resultExtractor.extract(r)))
+      mergedResult    = t99Results.reduce(_ merge _)
     } yield {
-      Response(200, detectedTexts.toString(), new util.HashMap())
+      Response(200, mergedResult.toString, new util.HashMap())
     }
 }
 
