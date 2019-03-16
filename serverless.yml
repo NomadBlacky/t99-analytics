@@ -51,6 +51,7 @@ functions:
   t99:
     role: t99FunctionRole
     handler: t99.lambda.Handler
+    timeout: 30
     events:
       - http:
           path: execute
