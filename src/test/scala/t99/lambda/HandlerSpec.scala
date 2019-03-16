@@ -8,6 +8,7 @@ import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.{AsyncFunSpec, MustMatchers}
 import org.scalatestplus.mockito.MockitoSugar
+import t99.rekognition.{DetectedTextResults, RekognitionClient, T99Image}
 import t99.twitter.TwitterClient
 import t99.twitter.model.Tweet
 
@@ -18,7 +19,7 @@ class HandlerSpec extends AsyncFunSpec with MustMatchers with MockitoSugar {
   describe("handleRequest") {
 
     it("must return a 401 response when authToken is invalid") {
-      val handler = new Handler("valid token", mock[TwitterClient])
+      val handler = new Handler("valid token", mock[TwitterClient], mock[RekognitionClient])
       val body =
         """{
           |  "auth_token":"invalid token",
@@ -34,16 +35,23 @@ class HandlerSpec extends AsyncFunSpec with MustMatchers with MockitoSugar {
       result mustBe expect
     }
 
-    it("must return a 200 response with image count when authToken is valid") {
+    it("must return a 200 response when authToken is valid") {
       val handler = {
         val mockTwitterClient = mock[TwitterClient]
         when(mockTwitterClient.getTweet(any())(any())).thenReturn {
           Future.successful(mock[Tweet])
         }
         when(mockTwitterClient.getImages(any())(any())).thenReturn {
-          Future.successful(Seq(mock[BufferedImage], mock[BufferedImage]))
+          Future.successful(Seq(mock[T99Image], mock[T99Image]))
         }
-        new Handler("valid token", mockTwitterClient)
+        val mockRekognitionClient = {
+          val m       = mock[RekognitionClient]
+          val results = spy(DetectedTextResults(Seq.empty))
+          when(results.toString).thenReturn("OK")
+          when(m.detectTexts(any())(any())).thenReturn(Future.successful(results))
+          m
+        }
+        new Handler("valid token", mockTwitterClient, mockRekognitionClient)
       }
       val body =
         """{
@@ -55,7 +63,7 @@ class HandlerSpec extends AsyncFunSpec with MustMatchers with MockitoSugar {
 
       val result = handler.handleRequest(request, TestContext())
 
-      val expect = Response(200, "2", new util.HashMap())
+      val expect = Response(200, "List(OK, OK)", new util.HashMap())
 
       result mustBe expect
     }

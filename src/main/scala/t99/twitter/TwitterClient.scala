@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream
 
 import javax.imageio.ImageIO
 import scalaj.http._
+import t99.rekognition.T99Image
 import t99.twitter.model.{Tweet, TweetId}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -18,11 +19,12 @@ class TwitterClient(consumer: Token, token: Token, http: HttpClient = HttpClient
     upickle.default.read[Tweet](response.body)
   }
 
-  def getImages(tweet: Tweet)(implicit ec: ExecutionContext): Future[Seq[BufferedImage]] = {
+  def getImages(tweet: Tweet)(implicit ec: ExecutionContext): Future[Seq[T99Image]] = {
     Future.traverse(tweet.medias) { media =>
       Future {
         val response = http.executeBytes(Http(media.mediaUrlHttps))
-        ImageIO.read(new ByteArrayInputStream(response.body))
+        val image    = ImageIO.read(new ByteArrayInputStream(response.body))
+        T99Image(image)
       }
     }
   }
