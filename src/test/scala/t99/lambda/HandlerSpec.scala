@@ -47,6 +47,7 @@ class HandlerSpec extends AsyncFunSpec with MustMatchers with MockitoSugar with 
           when(m.getImages(any())(any())).thenReturn {
             Future.successful(Seq(mock[T99Image], mock[T99Image]))
           }
+          when(m.postTweet(any(), any())(any())).thenReturn(Future.successful(()))
           m
         }
         val mockRekognitionClient = {
