@@ -1,0 +1,38 @@
+stages:
+  - test
+
+test & assembly:
+  stage: test
+  image: hseeberger/scala-sbt:8u181_2.12.8_1.2.8
+  script:
+  - >-
+    sbt
+    -sbt-dir .sbt
+    -ivy .ivy2
+    -mem 2048
+    assembly
+  cache:
+    paths:
+    - .sbt
+    - .ivy2
+  artifacts:
+    paths:
+    - target/scala-2.12/t99.jar
+    expire_in: 30 days
+
+scalafmt:
+  stage: test
+  image: hseeberger/scala-sbt:8u181_2.12.8_1.2.8
+  script:
+  - >-
+    sbt
+    -sbt-dir .sbt
+    -ivy .ivy2
+    -mem 2048
+    scalafmt::test
+    test:scalafmt::test
+    sbt:scalafmt::test
+  cache:
+    paths:
+    - .sbt
+    - .ivy2
