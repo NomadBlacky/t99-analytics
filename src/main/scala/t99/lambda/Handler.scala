@@ -73,7 +73,6 @@ class Handler(
       detectedResults <- Future.traverse(images)(rekognitionClient.detectTexts(_))
       t99Results      <- Future.traverse(detectedResults)(r => Future.successful(resultExtractor.extract(r)))
       mergedResult    = t99Results.reduce(_ merge _)
-      _               <- twitterClient.postTweet(body.tweetId, mergedResult)
     } yield {
       Response(200, mergedResult.toString, new util.HashMap())
     }
