@@ -69,7 +69,7 @@ resources:
       Type: AWS::IAM::Role
       Properties:
         Path: /
-        RoleName: T99FunctionRole-${opt:stage}
+        RoleName: T99FunctionRole-${self:provider.stage}
         AssumeRolePolicyDocument:
           Version: '2012-10-17'
           Statement:
@@ -79,7 +79,7 @@ resources:
                   - lambda.amazonaws.com
               Action: sts:AssumeRole
         Policies:
-          - PolicyName: t99FunctionPolicy-${opt:stage}
+          - PolicyName: t99FunctionPolicy-${self:provider.stage}
             PolicyDocument:
               Version: '2012-10-17'
               Statement:
