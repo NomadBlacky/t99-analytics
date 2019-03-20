@@ -13,7 +13,7 @@
 
 service: t99-analytics # NOTE: update this with your service name
 
-frameworkVersion: "=1.38.0"
+frameworkVersion: "=1.39.1"
 
 provider:
   name: aws
