@@ -1,5 +1,6 @@
 stages:
   - test
+  - deploy
 
 test & assembly:
   stage: test
@@ -36,3 +37,16 @@ scalafmt:
     paths:
     - .sbt
     - .ivy2
+
+deploy prod:
+  stage: deploy
+  image:
+    name: nomadblacky/serverless:1.39.1
+    entrypoint:
+      - ""
+  environment:
+    name: production
+  script:
+    - serverless deploy --stage prod
+  only:
+    - master
