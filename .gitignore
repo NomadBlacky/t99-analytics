@@ -108,3 +108,4 @@ project/plugins/project/
 
 ## Serverless ###
 .serverless
+node_modules/

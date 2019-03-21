@@ -46,7 +46,12 @@ deploy prod:
       - ""
   environment:
     name: production
+  before_script:
+    - npm install --save-dev serverless-plugin-tracing
   script:
     - serverless deploy --stage prod
+  cache:
+    paths:
+      - node_modules/
   only:
     - master
