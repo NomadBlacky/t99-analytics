@@ -1,5 +1,4 @@
 package t99.twitter
-import javax.imageio.ImageIO
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.{AsyncFunSpec, MustMatchers}

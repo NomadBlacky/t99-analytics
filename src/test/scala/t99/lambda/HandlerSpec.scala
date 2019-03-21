@@ -1,5 +1,4 @@
 package t99.lambda
-import java.awt.image.BufferedImage
 import java.util
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent
