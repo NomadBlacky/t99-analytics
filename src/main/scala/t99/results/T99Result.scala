@@ -1,20 +1,21 @@
 package t99.results
+import utils.SnakePickle
 
 case class T99Result(
-    ko: Option[T99ResultValue.KO] = None,
-    exp: Option[T99ResultValue.Exp] = None,
-    single: Option[T99ResultValue.Single] = None,
-    double: Option[T99ResultValue.Double] = None,
-    triple: Option[T99ResultValue.Triple] = None,
-    tetris: Option[T99ResultValue.Tetris] = None,
-    tSpin: Option[T99ResultValue.TSpin] = None,
-    miniTSpin: Option[T99ResultValue.MiniTSpin] = None,
-    tSpinSingle: Option[T99ResultValue.TSpinSingle] = None,
-    tSpinDouble: Option[T99ResultValue.TSpinDouble] = None,
-    tSpinTriple: Option[T99ResultValue.TSpinTriple] = None,
-    maxRen: Option[T99ResultValue.MaxRen] = None,
-    backToBack: Option[T99ResultValue.BackToBack] = None,
-    allClear: Option[T99ResultValue.AllClear] = None
+    ko: Option[T99ResultValue.KO],
+    exp: Option[T99ResultValue.Exp],
+    single: Option[T99ResultValue.Single],
+    double: Option[T99ResultValue.Double],
+    triple: Option[T99ResultValue.Triple],
+    tetris: Option[T99ResultValue.Tetris],
+    tSpin: Option[T99ResultValue.TSpin],
+    miniTSpin: Option[T99ResultValue.MiniTSpin],
+    tSpinSingle: Option[T99ResultValue.TSpinSingle],
+    tSpinDouble: Option[T99ResultValue.TSpinDouble],
+    tSpinTriple: Option[T99ResultValue.TSpinTriple],
+    maxRen: Option[T99ResultValue.MaxRen],
+    backToBack: Option[T99ResultValue.BackToBack],
+    allClear: Option[T99ResultValue.AllClear]
 ) {
   def added(value: T99ResultValue): T99Result = value match {
     case v: T99ResultValue.KO          => copy(ko = Some(v))
@@ -61,5 +62,7 @@ case class T99Result(
 }
 
 object T99Result {
-  val empty = T99Result()
+  val empty = T99Result(None, None, None, None, None, None, None, None, None, None, None, None, None, None)
+
+  implicit val t99ResultRW: SnakePickle.ReadWriter[T99Result] = SnakePickle.macroRW[T99Result]
 }

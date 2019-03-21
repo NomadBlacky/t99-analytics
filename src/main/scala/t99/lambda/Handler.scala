@@ -1,7 +1,5 @@
 package t99.lambda
 
-import java.util
-
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent
 import com.amazonaws.services.lambda.runtime.{Context, RequestHandler}
 import com.amazonaws.services.rekognition.AmazonRekognitionClientBuilder
@@ -10,7 +8,9 @@ import t99.lambda.RequestHelper._
 import t99.rekognition.RekognitionClient
 import t99.results.T99ResultExtractor
 import t99.twitter.TwitterClient
+import utils.SnakePickle
 
+import scala.collection.JavaConverters._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
@@ -49,7 +49,11 @@ class Handler(
 
       fu.recover {
           case InvalidTokenException() =>
-            Response(401, "Invalid token", new util.HashMap())
+            Response(
+              401,
+              SnakePickle.write(Map("error" -> "Invalid token")),
+              Map("Content-Type"            -> "application/json").asJava
+            )
         }
         .andThen {
           case Success(value) =>
@@ -73,8 +77,9 @@ class Handler(
       detectedResults <- Future.traverse(images)(rekognitionClient.detectTexts(_))
       t99Results      <- Future.traverse(detectedResults)(r => Future.successful(resultExtractor.extract(r)))
       mergedResult    = t99Results.reduce(_ merge _)
+      resultJson      = SnakePickle.write(mergedResult)
     } yield {
-      Response(200, mergedResult.toString, new util.HashMap())
+      Response(200, resultJson, Map("Content-Type" -> "application/json").asJava)
     }
 }
 
