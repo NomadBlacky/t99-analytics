@@ -3,6 +3,7 @@ package t99.lambda
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent
 import com.amazonaws.services.lambda.runtime.{Context, RequestHandler}
 import com.amazonaws.services.rekognition.AmazonRekognitionClientBuilder
+import org.apache.logging.log4j.LogManager
 import scalaj.http.Token
 import t99.lambda.RequestHelper._
 import t99.rekognition.RekognitionClient
@@ -23,6 +24,8 @@ class Handler(
     resultExtractor: T99ResultExtractor
 ) extends RequestHandler[APIGatewayProxyRequestEvent, Response] {
 
+  private val logger = LogManager.getLogger(getClass)
+
   /**
     * Default constructor for Lambda.
     */
@@ -37,8 +40,7 @@ class Handler(
   )
 
   def handleRequest(input: APIGatewayProxyRequestEvent, context: Context): Response = {
-    val logger = context.getLogger
-    logger.log(input.toString)
+    logger.info(input.toString)
 
     val resultF: Future[Response] = {
       val fu = for {
@@ -57,9 +59,9 @@ class Handler(
         }
         .andThen {
           case Success(value) =>
-            logger.log(s"OK: $value")
+            logger.info(s"OK: $value")
           case Failure(exception) =>
-            logger.log(s"Error: $exception")
+            logger.error(s"Error: $exception")
         }
     }
 

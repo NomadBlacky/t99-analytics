@@ -22,6 +22,7 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-xray-recorder-sdk-core"                 % versions.xray,
   "com.amazonaws" % "aws-xray-recorder-sdk-aws-sdk"              % versions.xray,
   "com.amazonaws" % "aws-xray-recorder-sdk-aws-sdk-instrumentor" % versions.xray,
+  "com.amazonaws" % "aws-lambda-java-log4j2"                     % "1.1.0",
   "org.scalatest" %% "scalatest"                                 % "3.0.6" % Test,
   "org.mockito"   % "mockito-core"                               % "2.24.5" % Test
 )
@@ -36,6 +37,7 @@ scalacOptions ++= Seq(
 
 assemblyMergeStrategy in assembly := {
   case PathList("com", "amazonaws", "xray", "sdk.properties") => MergeStrategy.first
+  case PathList(ps @ _*) if ps.last == "Log4j2Plugins.dat"    => Log4j2MergeStrategy.plugincache
   case x =>
     val oldStrategy = (assemblyMergeStrategy in assembly).value
     oldStrategy(x)
