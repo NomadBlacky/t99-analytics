@@ -8,7 +8,6 @@ import scala.util.Try
 object RequestHelper {
   implicit class RichAPIGatewayProxyRequestEvent(event: APIGatewayProxyRequestEvent) {
     lazy val parsedBody: Try[RequestBody] = {
-      println(s"body: ${event.getBody}")
       Try(SnakePickle.read[RequestBody](event.getBody))
     }
   }
