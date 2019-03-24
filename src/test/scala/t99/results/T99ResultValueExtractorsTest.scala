@@ -1,7 +1,7 @@
 package t99.results
 import org.scalatest.{FunSpec, MustMatchers}
-import t99.results.T99ResultValue._
 import t99.results.T99ResultValueExtractors._
+import T99ResultValueType._
 
 class T99ResultValueExtractorsTest extends FunSpec with MustMatchers {
 
@@ -9,7 +9,7 @@ class T99ResultValueExtractorsTest extends FunSpec with MustMatchers {
     it("extract") {
       val texts  = Seq("aaa", "K.O.", "20", "bbb")
       val result = KOExtractor.extract(texts)
-      result mustBe Some(KO(20))
+      result mustBe Some(T99ResultValue(KO, 20))
     }
   }
 
@@ -17,7 +17,7 @@ class T99ResultValueExtractorsTest extends FunSpec with MustMatchers {
     it("extract") {
       val texts  = Seq("aaa", "EXP", "1000", "bbb")
       val result = ExpExtractor.extract(texts)
-      result mustBe Some(Exp(1000))
+      result mustBe Some(T99ResultValue(Exp, 1000))
     }
   }
 
@@ -25,7 +25,7 @@ class T99ResultValueExtractorsTest extends FunSpec with MustMatchers {
     it("extract") {
       val texts  = Seq("aaa", "Single", "30", "bbb")
       val result = SingleExtractor.extract(texts)
-      result mustBe Some(Single(30))
+      result mustBe Some(T99ResultValue(Single, 30))
     }
   }
 
@@ -33,7 +33,7 @@ class T99ResultValueExtractorsTest extends FunSpec with MustMatchers {
     it("extract") {
       val texts  = Seq("aaa", "Double", "25", "bbb")
       val result = DoubleExtractor.extract(texts)
-      result mustBe Some(Double(25))
+      result mustBe Some(T99ResultValue(Double, 25))
     }
   }
 
@@ -41,7 +41,7 @@ class T99ResultValueExtractorsTest extends FunSpec with MustMatchers {
     it("extract") {
       val texts  = Seq("aaa", "Triple", "7", "bbb")
       val result = TripleExtractor.extract(texts)
-      result mustBe Some(Triple(7))
+      result mustBe Some(T99ResultValue(Triple, 7))
     }
   }
 
@@ -49,7 +49,7 @@ class T99ResultValueExtractorsTest extends FunSpec with MustMatchers {
     it("extract") {
       val texts  = Seq("aaa", "Tetris", "22", "bbb")
       val result = TetrisExtractor.extract(texts)
-      result mustBe Some(Tetris(22))
+      result mustBe Some(T99ResultValue(Tetris, 22))
     }
   }
 
@@ -57,7 +57,7 @@ class T99ResultValueExtractorsTest extends FunSpec with MustMatchers {
     it("extract") {
       val texts  = Seq("aaa", "T-Spin", "2", "bbb")
       val result = TSpinExtractor.extract(texts)
-      result mustBe Some(TSpin(2))
+      result mustBe Some(T99ResultValue(TSpin, 2))
     }
   }
 
@@ -65,7 +65,7 @@ class T99ResultValueExtractorsTest extends FunSpec with MustMatchers {
     it("extract") {
       val texts  = Seq("aaa", "Mini", "T-Spin", "3", "bbb")
       val result = MiniTSpinExtractor.extract(texts)
-      result mustBe Some(MiniTSpin(3))
+      result mustBe Some(T99ResultValue(MiniTSpin, 3))
     }
   }
 
@@ -73,7 +73,7 @@ class T99ResultValueExtractorsTest extends FunSpec with MustMatchers {
     it("extract") {
       val texts  = Seq("aaa", "T-Spin", "Single", "0", "bbb")
       val result = TSpinSingleExtractor.extract(texts)
-      result mustBe Some(TSpinSingle(0))
+      result mustBe Some(T99ResultValue(TSpinSingle, 0))
     }
   }
 
@@ -81,7 +81,7 @@ class T99ResultValueExtractorsTest extends FunSpec with MustMatchers {
     it("extract") {
       val texts  = Seq("aaa", "T-Spin", "Double", "15", "bbb")
       val result = TSpinDoubleExtractor.extract(texts)
-      result mustBe Some(TSpinDouble(15))
+      result mustBe Some(T99ResultValue(TSpinDouble, 15))
     }
   }
 
@@ -89,7 +89,7 @@ class T99ResultValueExtractorsTest extends FunSpec with MustMatchers {
     it("extract") {
       val texts  = Seq("aaa", "T-Spin", "Triple", "2", "bbb")
       val result = TSpinTripleExtractor.extract(texts)
-      result mustBe Some(TSpinTriple(2))
+      result mustBe Some(T99ResultValue(TSpinTriple, 2))
     }
   }
 
@@ -97,7 +97,7 @@ class T99ResultValueExtractorsTest extends FunSpec with MustMatchers {
     it("extract") {
       val texts  = Seq("aaa", "fdajREN", "8", "bbb")
       val result = MaxRenExtractor.extract(texts)
-      result mustBe Some(MaxRen(8))
+      result mustBe Some(T99ResultValue(MaxRen, 8))
     }
   }
 
@@ -105,7 +105,7 @@ class T99ResultValueExtractorsTest extends FunSpec with MustMatchers {
     it("extract") {
       val texts  = Seq("aaa", "Back-to-Back", "20", "bbb")
       val result = BackToBackExtractor.extract(texts)
-      result mustBe Some(BackToBack(20))
+      result mustBe Some(T99ResultValue(BackToBack, 20))
     }
   }
 
@@ -113,7 +113,7 @@ class T99ResultValueExtractorsTest extends FunSpec with MustMatchers {
     it("extract") {
       val texts  = Seq("aaa", "All", "Clear", "1", "bbb")
       val result = AllClearExtractor.extract(texts)
-      result mustBe Some(AllClear(1))
+      result mustBe Some(T99ResultValue(AllClear, 1))
     }
   }
 }

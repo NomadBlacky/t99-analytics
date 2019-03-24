@@ -6,8 +6,8 @@ import org.mockito.Mockito._
 import org.scalatest.{AsyncFunSpec, MustMatchers}
 import org.scalatestplus.mockito.MockitoSugar
 import t99.rekognition.{DetectedTextResults, RekognitionClient, T99Image}
-import t99.results.T99ResultValue._
-import t99.results.{T99Result, T99ResultExtractor}
+import t99.results.T99ResultValueType._
+import t99.results.{T99Result, T99ResultExtractor, T99ResultValue}
 import t99.twitter.TwitterClient
 import t99.twitter.model.Tweet
 
@@ -41,20 +41,21 @@ class HandlerSpec extends AsyncFunSpec with MustMatchers with MockitoSugar {
 
     it("must return a 200 response when authToken is valid") {
       val t99Result = T99Result(
-        ko = Some(KO(1)),
-        exp = Some(Exp(2)),
-        single = Some(Single(3)),
-        double = Some(Double(4)),
-        triple = Some(Triple(5)),
-        tetris = Some(Tetris(6)),
-        tSpin = Some(TSpin(7)),
-        miniTSpin = Some(MiniTSpin(8)),
-        tSpinSingle = Some(TSpinSingle(9)),
-        tSpinDouble = Some(TSpinDouble(10)),
-        tSpinTriple = Some(TSpinTriple(11)),
-        maxRen = Some(MaxRen(12)),
-        backToBack = Some(BackToBack(13)),
-        allClear = None
+        Seq(
+          T99ResultValue(KO, 1),
+          T99ResultValue(Exp, 2),
+          T99ResultValue(Single, 3),
+          T99ResultValue(Double, 4),
+          T99ResultValue(Triple, 5),
+          T99ResultValue(Tetris, 6),
+          T99ResultValue(TSpin, 7),
+          T99ResultValue(MiniTSpin, 8),
+          T99ResultValue(TSpinSingle, 9),
+          T99ResultValue(TSpinDouble, 10),
+          T99ResultValue(TSpinTriple, 11),
+          T99ResultValue(MaxRen, 12),
+          T99ResultValue(BackToBack, 13),
+        )
       )
       val handler = {
         val mockTwitterClient = {
@@ -93,7 +94,7 @@ class HandlerSpec extends AsyncFunSpec with MustMatchers with MockitoSugar {
 
       result mustBe Response(
         200,
-        """{"ko":[1],"exp":[2],"single":[3],"double":[4],"triple":[5],"tetris":[6],"t_spin":[7],"mini_t_spin":[8],"t_spin_single":[9],"t_spin_double":[10],"t_spin_triple":[11],"max_ren":[12],"back_to_back":[13],"all_clear":[]}""",
+        """{"values":[{"type":"TSpinTriple","value":11},{"type":"MaxRen","value":12},{"type":"BackToBack","value":13},{"type":"Double","value":4},{"type":"TSpin","value":7},{"type":"MiniTSpin","value":8},{"type":"TSpinDouble","value":10},{"type":"Exp","value":2},{"type":"TSpinSingle","value":9},{"type":"Tetris","value":6},{"type":"KO","value":1},{"type":"Triple","value":5},{"type":"Single","value":3}]}""",
         Map("Content-Type" -> "application/json").asJava
       )
     }

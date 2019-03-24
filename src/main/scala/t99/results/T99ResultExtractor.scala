@@ -20,83 +20,86 @@ trait T99ResultValueExtractor {
 
 object T99ResultValueExtractors {
 
-  import T99ResultValue._
+  import T99ResultValueType._
 
   object KOExtractor extends T99ResultValueExtractor {
-    def extract(texts: Seq[String]): Option[KO] =
-      extractInternal(texts, 2) { case Seq("K.O.", n) => n }.map(KO.apply)
+    def extract(texts: Seq[String]): Option[T99ResultValue] =
+      extractInternal(KO, texts, 2) { case Seq("K.O.", n) => n }
   }
 
   object ExpExtractor extends T99ResultValueExtractor {
-    def extract(texts: Seq[String]): Option[Exp] =
-      extractInternal(texts, 2) { case Seq("EXP", n) => n }.map(Exp.apply)
+    def extract(texts: Seq[String]): Option[T99ResultValue] =
+      extractInternal(Exp, texts, 2) { case Seq("EXP", n) => n }
   }
 
   object SingleExtractor extends T99ResultValueExtractor {
-    def extract(texts: Seq[String]): Option[Single] =
-      extractInternal(texts, 2) { case Seq("Single", n) => n }.map(Single.apply)
+    def extract(texts: Seq[String]): Option[T99ResultValue] =
+      extractInternal(Single, texts, 2) { case Seq("Single", n) => n }
   }
 
   object DoubleExtractor extends T99ResultValueExtractor {
-    def extract(texts: Seq[String]): Option[Double] =
-      extractInternal(texts, 2) { case Seq("Double", n) => n }.map(Double.apply)
+    def extract(texts: Seq[String]): Option[T99ResultValue] =
+      extractInternal(Double, texts, 2) { case Seq("Double", n) => n }
   }
 
   object TripleExtractor extends T99ResultValueExtractor {
-    def extract(texts: Seq[String]): Option[Triple] =
-      extractInternal(texts, 2) { case Seq("Triple", n) => n }.map(Triple.apply)
+    def extract(texts: Seq[String]): Option[T99ResultValue] =
+      extractInternal(Triple, texts, 2) { case Seq("Triple", n) => n }
   }
 
   object TetrisExtractor extends T99ResultValueExtractor {
-    def extract(texts: Seq[String]): Option[Tetris] =
-      extractInternal(texts, 2) { case Seq("Tetris", n) => n }.map(Tetris.apply)
+    def extract(texts: Seq[String]): Option[T99ResultValue] =
+      extractInternal(Tetris, texts, 2) { case Seq("Tetris", n) => n }
   }
 
   object TSpinExtractor extends T99ResultValueExtractor {
-    def extract(texts: Seq[String]): Option[TSpin] =
-      extractInternal(texts, 2) { case Seq("T-Spin", n) => n }.map(TSpin.apply)
+    def extract(texts: Seq[String]): Option[T99ResultValue] =
+      extractInternal(TSpin, texts, 2) { case Seq("T-Spin", n) => n }
   }
 
   object MiniTSpinExtractor extends T99ResultValueExtractor {
-    def extract(texts: Seq[String]): Option[MiniTSpin] =
-      extractInternal(texts, 3) { case Seq("Mini", "T-Spin", n) => n }.map(MiniTSpin.apply)
+    def extract(texts: Seq[String]): Option[T99ResultValue] =
+      extractInternal(MiniTSpin, texts, 3) { case Seq("Mini", "T-Spin", n) => n }
   }
 
   object TSpinSingleExtractor extends T99ResultValueExtractor {
-    def extract(texts: Seq[String]): Option[TSpinSingle] =
-      extractInternal(texts, 3) { case Seq("T-Spin", "Single", n) => n }.map(TSpinSingle.apply)
+    def extract(texts: Seq[String]): Option[T99ResultValue] =
+      extractInternal(TSpinSingle, texts, 3) { case Seq("T-Spin", "Single", n) => n }
   }
 
   object TSpinDoubleExtractor extends T99ResultValueExtractor {
-    def extract(texts: Seq[String]): Option[TSpinDouble] =
-      extractInternal(texts, 3) { case Seq("T-Spin", "Double", n) => n }.map(TSpinDouble.apply)
+    def extract(texts: Seq[String]): Option[T99ResultValue] =
+      extractInternal(TSpinDouble, texts, 3) { case Seq("T-Spin", "Double", n) => n }
   }
 
   object TSpinTripleExtractor extends T99ResultValueExtractor {
-    def extract(texts: Seq[String]): Option[TSpinTriple] =
-      extractInternal(texts, 3) { case Seq("T-Spin", "Triple", n) => n }.map(TSpinTriple.apply)
+    def extract(texts: Seq[String]): Option[T99ResultValue] =
+      extractInternal(TSpinTriple, texts, 3) { case Seq("T-Spin", "Triple", n) => n }
   }
 
   object MaxRenExtractor extends T99ResultValueExtractor {
-    def extract(texts: Seq[String]): Option[MaxRen] =
-      extractInternal(texts, 2) { case Seq(ren, n) if ren.endsWith("REN") => n }.map(MaxRen.apply)
+    def extract(texts: Seq[String]): Option[T99ResultValue] =
+      extractInternal(MaxRen, texts, 2) { case Seq(ren, n) if ren.endsWith("REN") => n }
   }
 
   object BackToBackExtractor extends T99ResultValueExtractor {
-    def extract(texts: Seq[String]): Option[BackToBack] =
-      extractInternal(texts, 2) { case Seq("Back-to-Back", n) => n }.map(BackToBack.apply)
+    def extract(texts: Seq[String]): Option[T99ResultValue] =
+      extractInternal(BackToBack, texts, 2) { case Seq("Back-to-Back", n) => n }
   }
 
   object AllClearExtractor extends T99ResultValueExtractor {
-    def extract(texts: Seq[String]): Option[AllClear] =
-      extractInternal(texts, 3) { case Seq("All", "Clear", n) => n }.map(AllClear.apply)
+    def extract(texts: Seq[String]): Option[T99ResultValue] =
+      extractInternal(AllClear, texts, 3) { case Seq("All", "Clear", n) => n }
   }
 
-  private def extractInternal(texts: Seq[String], sliding: Int)(pf: PartialFunction[Seq[String], String]): Option[Int] =
+  private def extractInternal(typ: T99ResultValueType, texts: Seq[String], sliding: Int)(
+      pf: PartialFunction[Seq[String], String]
+  ): Option[T99ResultValue] =
     texts
       .sliding(sliding)
       .collectFirst(pf)
       .flatMap(toIntCleansing)
+      .map(n => T99ResultValue(typ, n))
 
   private def toIntCleansing(numString: String): Option[Int] =
     Try(numString.replaceAll("O", "0").toInt).toOption
