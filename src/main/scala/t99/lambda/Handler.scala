@@ -79,6 +79,7 @@ class Handler(
       detectedResults <- Future.traverse(images)(rekognitionClient.detectTexts(_))
       t99Results      <- Future.traverse(detectedResults)(r => Future.successful(resultExtractor.extract(r)))
       mergedResult    = t99Results.reduce(_ merge _)
+      _               = mergedResult.sendMetrics(tweet.createdAt)
       resultJson      = SnakePickle.write(mergedResult)
     } yield {
       Response(200, resultJson, Map("Content-Type" -> "application/json").asJava)

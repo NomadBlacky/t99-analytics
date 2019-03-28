@@ -1,4 +1,7 @@
 package t99.results
+import java.time.Instant
+
+import t99.lambda.MetricsLogger
 import utils.SnakePickle
 
 case class T99Result(values: Seq[T99ResultValue]) {
@@ -14,6 +17,14 @@ case class T99Result(values: Seq[T99ResultValue]) {
   def merge(other: T99Result): T99Result = {
     val values = (this.values ++ other.values).groupBy(_.resultType).map(_._2.head)
     T99Result(values.toSeq)
+  }
+
+  def sendMetrics(createdAt: Instant): Unit = T99ResultValueType.allTypes.foreach { typ =>
+    values
+      .find(_.resultType == typ)
+      .fold(MetricsLogger.send(s"${typ.name}_missing", 1, "count", createdAt))(
+        rv => MetricsLogger.send(s"${typ.name}_value", rv.value, "count", createdAt)
+      )
   }
 }
 

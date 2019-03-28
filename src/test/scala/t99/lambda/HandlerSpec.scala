@@ -1,4 +1,6 @@
 package t99.lambda
+import java.time.Instant
+
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent
 import com.amazonaws.services.lambda.runtime.{ClientContext, CognitoIdentity, Context, LambdaLogger}
 import org.mockito.ArgumentMatchers._
@@ -59,9 +61,11 @@ class HandlerSpec extends AsyncFunSpec with MustMatchers with MockitoSugar {
       )
       val handler = {
         val mockTwitterClient = {
-          val m = mock[TwitterClient]
+          val m         = mock[TwitterClient]
+          val tweetMock = mock[Tweet]
+          when(tweetMock.createdAt).thenReturn(Instant.now())
           when(m.getTweet(any())(any())).thenReturn {
-            Future.successful(mock[Tweet])
+            Future.successful(tweetMock)
           }
           when(m.getImages(any())(any())).thenReturn {
             Future.successful(Seq(mock[T99Image], mock[T99Image]))
