@@ -1,6 +1,7 @@
 package t99.twitter.model
-import org.scalatest.{FunSpec, MustMatchers}
+import java.time.Instant
 
+import org.scalatest.{FunSpec, MustMatchers}
 import upickle.default._
 
 import scala.io.Source
@@ -17,7 +18,8 @@ class TweetSpec extends FunSpec with MustMatchers {
         Seq(
           TweetMedia("photo", "https://pbs.twimg.com/media/D1JmM2hVsAAxA4O.jpg"),
           TweetMedia("photo", "https://pbs.twimg.com/media/D1JmM2XUYAABN9B.jpg")
-        )
+        ),
+        Instant.parse("2019-03-08T16:32:11Z")
       )
 
       tweet mustBe expect
@@ -27,7 +29,7 @@ class TweetSpec extends FunSpec with MustMatchers {
       val tweetJson = Source.fromResource("sample_tweet_no_extended_entities.json").getLines().mkString("\n")
       val tweet     = read(tweetJson)(Tweet.tweetReader)
 
-      val expect = Tweet(TweetId("1104057231635431424"), Seq.empty)
+      val expect = Tweet(TweetId("1104057231635431424"), Seq.empty, Instant.parse("2019-03-08T16:32:11Z"))
 
       tweet mustBe expect
     }

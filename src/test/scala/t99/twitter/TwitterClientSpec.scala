@@ -1,4 +1,6 @@
 package t99.twitter
+import java.time.Instant
+
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.{AsyncFunSpec, MustMatchers}
@@ -40,7 +42,8 @@ class TwitterClientSpec extends AsyncFunSpec with MustMatchers with MockitoSugar
         Seq(
           TweetMedia("photo", "https://pbs.twimg.com/media/D1JmM2hVsAAxA4O.jpg"),
           TweetMedia("photo", "https://pbs.twimg.com/media/D1JmM2XUYAABN9B.jpg")
-        )
+        ),
+        Instant.parse("2019-03-08T16:32:11Z")
       )
 
       result.map(_ mustBe expect)
