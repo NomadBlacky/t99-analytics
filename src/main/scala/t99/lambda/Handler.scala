@@ -61,7 +61,7 @@ class Handler(
           case Success(value) =>
             logger.info(s"OK: $value")
           case Failure(exception) =>
-            logger.error(s"Error: $exception")
+            logger.error(s"Error: ${exception.getMessage}", exception)
         }
     }
 
