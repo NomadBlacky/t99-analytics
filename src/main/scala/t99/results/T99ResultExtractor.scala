@@ -24,7 +24,7 @@ object T99ResultValueExtractors {
 
   object KOExtractor extends T99ResultValueExtractor {
     def extract(texts: Seq[String]): Option[T99ResultValue] =
-      extractInternal(KO, texts, 2) { case Seq("K.O.", n) => n }
+      extractInternal(Ko, texts, 2) { case Seq("K.O.", n) => n }
   }
 
   object ExpExtractor extends T99ResultValueExtractor {

@@ -44,7 +44,7 @@ class HandlerSpec extends AsyncFunSpec with MustMatchers with MockitoSugar {
     it("must return a 200 response when authToken is valid") {
       val t99Result = T99Result(
         Seq(
-          T99ResultValue(KO, 1),
+          T99ResultValue(Ko, 1),
           T99ResultValue(Exp, 2),
           T99ResultValue(Single, 3),
           T99ResultValue(Double, 4),
@@ -98,7 +98,7 @@ class HandlerSpec extends AsyncFunSpec with MustMatchers with MockitoSugar {
 
       result mustBe Response(
         200,
-        """{"values":[{"type":"TSpinTriple","value":11},{"type":"MaxRen","value":12},{"type":"BackToBack","value":13},{"type":"Double","value":4},{"type":"TSpin","value":7},{"type":"MiniTSpin","value":8},{"type":"TSpinDouble","value":10},{"type":"Exp","value":2},{"type":"TSpinSingle","value":9},{"type":"Tetris","value":6},{"type":"KO","value":1},{"type":"Triple","value":5},{"type":"Single","value":3}]}""",
+        """{"t_spin_single":9,"t_spin_double":10,"tetris":6,"triple":5,"ko":1,"exp":2,"max_ren":12,"double":4,"single":3,"t_spin_triple":11,"mini_t_spin":8,"back_to_back":13,"t_spin":7}""",
         Map("Content-Type" -> "application/json").asJava
       )
     }

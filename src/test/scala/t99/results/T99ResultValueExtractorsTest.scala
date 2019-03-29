@@ -9,7 +9,7 @@ class T99ResultValueExtractorsTest extends FunSpec with MustMatchers {
     it("extract") {
       val texts  = Seq("aaa", "K.O.", "20", "bbb")
       val result = KOExtractor.extract(texts)
-      result mustBe Some(T99ResultValue(KO, 20))
+      result mustBe Some(T99ResultValue(Ko, 20))
     }
   }
 
