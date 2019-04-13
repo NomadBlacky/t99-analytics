@@ -26,7 +26,7 @@ case class T99Result(values: Seq[T99ResultValue]) {
     values
       .find(_.resultType == typ)
       .fold(MetricsLogger.send(s"${typ.name}_missing", 1, "count", createdAt))(
-        rv => MetricsLogger.send(s"${typ.name}_value", rv.value, "count", createdAt)
+        rv => MetricsLogger.send(s"${typ.name}_value", rv.value, "gauge", createdAt)
       )
   }
 }
