@@ -2,17 +2,13 @@ package t99.twitter
 import java.time.Instant
 
 import org.scalatest.{AsyncFunSpec, MustMatchers}
-import scalaj.http.Token
 import t99.twitter.model.{Tweet, TweetId, TweetMedia}
 
 class TwitterClientIntegrationTest extends AsyncFunSpec with MustMatchers {
 
   describe("getTweet") {
     it("should request to Twitter API and return a tweet") {
-      val client = new TwitterClient(
-        Token(sys.env("T99_TWITTER_CONSUMER_KEY"), sys.env("T99_TWITTER_CONSUMER_SECRET")),
-        Token(sys.env("T99_TWITTER_ACCESS_KEY"), sys.env("T99_TWITTER_ACCESS_SECRET"))
-      )
+      val client  = new TwitterClient(sys.env("T99_TWITTER_OAUTH2_BEARER_TOKEN"))
       val tweetId = TweetId("1104057231635431424")
 
       val expect = Tweet(

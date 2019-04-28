@@ -13,11 +13,7 @@ import scala.io.Source
 class TwitterClientSpec extends AsyncFunSpec with MustMatchers with MockitoSugar {
 
   def genTwitterClient(mockHttpClient: HttpClient): TwitterClient =
-    new TwitterClient(
-      Token("consumer_key", "consumer_secret"),
-      Token("access_key", "access_secret"),
-      mockHttpClient
-    )
+    new TwitterClient("oatuh2bearertoken", mockHttpClient)
 
   describe("getTweet") {
     def genHttpClientMock(responseBody: String): HttpClient = {

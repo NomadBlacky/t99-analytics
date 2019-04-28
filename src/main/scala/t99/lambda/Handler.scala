@@ -4,7 +4,6 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent
 import com.amazonaws.services.lambda.runtime.{Context, RequestHandler}
 import com.amazonaws.services.rekognition.AmazonRekognitionClientBuilder
 import org.apache.logging.log4j.LogManager
-import scalaj.http.Token
 import t99.lambda.RequestHelper._
 import t99.rekognition.RekognitionClient
 import t99.results.T99ResultExtractor
@@ -31,10 +30,7 @@ class Handler(
     */
   def this() = this(
     sys.env("AUTH_TOKEN"),
-    new TwitterClient(
-      Token(sys.env("TWITTER_CONSUMER_KEY"), sys.env("TWITTER_CONSUMER_SECRET")),
-      Token(sys.env("TWITTER_ACCESS_KEY"), sys.env("TWITTER_ACCESS_SECRET"))
-    ),
+    new TwitterClient(sys.env("TWITTER_OAUTH2_BEARER_TOKEN")),
     new RekognitionClient(AmazonRekognitionClientBuilder.defaultClient()),
     new T99ResultExtractor
   )

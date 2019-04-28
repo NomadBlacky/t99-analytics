@@ -8,11 +8,11 @@ import t99.twitter.model.{Tweet, TweetId}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class TwitterClient(consumer: Token, token: Token, http: HttpClient = HttpClient) {
+class TwitterClient(oauth2Token: String, http: HttpClient = HttpClient) {
   def getTweet(id: TweetId)(implicit ec: ExecutionContext): Future[Tweet] = Future {
     val request = Http("https://api.twitter.com/1.1/statuses/show.json")
       .params("id" -> id.value.toString)
-      .oauth(consumer, token)
+      .header("Authorization", s"Bearer $oauth2Token")
     val response = http.executeString(request)
 
     upickle.default.read[Tweet](response.body)
