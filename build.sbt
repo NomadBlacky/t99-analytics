@@ -46,3 +46,7 @@ lazy val app = (project in file("."))
         oldStrategy(x)
     }
   )
+
+lazy val integrationTest = (project in file("integrationTest"))
+  .dependsOn(app % "test->test;compile->compile")
+  .settings(commonSettings)
