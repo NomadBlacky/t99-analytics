@@ -29,6 +29,8 @@ case class T99Result(values: Seq[T99ResultValue]) {
         rv => MetricsLogger.send(s"${typ.name}_value", rv.value, "gauge", createdAt)
       )
   }
+
+  def toMap: Map[String, Int] = values.map(r => r.resultType.name -> r.value).toMap
 }
 
 object T99Result {

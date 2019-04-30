@@ -7,6 +7,8 @@ import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.{AsyncFunSpec, MustMatchers}
 import org.scalatestplus.mockito.MockitoSugar
+import software.amazon.awssdk.services.dynamodb.model.PutItemResponse
+import t99.dynamodb.T99DynamoDbClient
 import t99.rekognition.{DetectedTextResults, RekognitionClient, T99Image}
 import t99.results.T99ResultValueType._
 import t99.results.{T99Result, T99ResultExtractor, T99ResultValue}
@@ -21,7 +23,13 @@ class HandlerSpec extends AsyncFunSpec with MustMatchers with MockitoSugar {
   describe("handleRequest") {
 
     it("must return a 401 response when authToken is invalid") {
-      val handler = new Handler("valid token", mock[TwitterClient], mock[RekognitionClient], mock[T99ResultExtractor])
+      val handler = new Handler(
+        "valid token",
+        mock[TwitterClient],
+        mock[RekognitionClient],
+        mock[T99ResultExtractor],
+        mock[T99DynamoDbClient]
+      )
       val body =
         """{
           |  "auth_token":"invalid token",
@@ -84,7 +92,13 @@ class HandlerSpec extends AsyncFunSpec with MustMatchers with MockitoSugar {
           when(m.extract(any())).thenReturn(t99Result)
           m
         }
-        new Handler("valid token", mockTwitterClient, mockRekognitionClient, mockExtractor)
+        val mockDynamoDbClient = {
+          val m   = mock[T99DynamoDbClient]
+          val res = PutItemResponse.builder().build()
+          when(m.putResult(any(), any())).thenReturn(Future.successful(res))
+          m
+        }
+        new Handler("valid token", mockTwitterClient, mockRekognitionClient, mockExtractor, mockDynamoDbClient)
       }
       val body =
         """{

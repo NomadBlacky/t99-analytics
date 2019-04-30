@@ -27,6 +27,7 @@ functions:
     environment:
       AUTH_TOKEN: ${env:T99_AUTH_TOKEN}
       TWITTER_OAUTH2_BEARER_TOKEN: ${env:T99_TWITTER_OAUTH2_BEARER_TOKEN}
+      RESULT_TABLE_NAME: ${self:resources.Resources.t99ResultTable.Properties.TableName}
 
 resources:
   Resources:
@@ -66,4 +67,22 @@ resources:
                     - rekognition:DetectText
                     - xray:PutTraceSegments
                     - xray:PutTelemetryRecords
+                    - dynamodb:PutItem
                   Resource: "*"
+
+    t99ResultTable:
+      Type: AWS::DynamoDB::Table
+      DeletionPolicy: Retain
+      Properties:
+        TableName: t99Result-${self:provider.stage}
+        AttributeDefinitions:
+          -
+            AttributeName: TweetId
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: TweetId
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
