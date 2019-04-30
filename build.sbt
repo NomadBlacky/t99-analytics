@@ -14,7 +14,8 @@ lazy val commonSettings = Seq(
     "-feature",
     "-Xlint",
     "-Xfatal-warnings"
-  )
+  ),
+  scalacOptions in (Test, console) := Seq()
 )
 
 lazy val app = (project in file("."))
