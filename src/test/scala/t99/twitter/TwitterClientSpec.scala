@@ -1,11 +1,12 @@
 package t99.twitter
+import java.io.ByteArrayInputStream
 import java.time.Instant
 
+import org.apache.http.{HttpEntity, HttpResponse}
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.{AsyncFunSpec, MustMatchers}
 import org.scalatestplus.mockito.MockitoSugar
-import scalaj.http._
 import t99.twitter.model.{Tweet, TweetId, TweetMedia}
 
 import scala.io.Source
@@ -19,11 +20,18 @@ class TwitterClientSpec extends AsyncFunSpec with MustMatchers with MockitoSugar
     def genHttpClientMock(responseBody: String): HttpClient = {
       val mockClient = mock[HttpClient]
       val mockResponse = {
-        val m = mock[HttpResponse[String]]
-        when(m.body).thenReturn(responseBody)
+        val mockHttpEntity = {
+          val m = mock[HttpEntity]
+          when(m.getContent).thenReturn {
+            new ByteArrayInputStream(responseBody.getBytes("UTF-8"))
+          }
+          m
+        }
+        val m = mock[HttpResponse]
+        when(m.getEntity).thenReturn(mockHttpEntity)
         m
       }
-      when(mockClient.executeString(any())).thenReturn(mockResponse)
+      when(mockClient.execute(any())).thenReturn(mockResponse)
       mockClient
     }
 

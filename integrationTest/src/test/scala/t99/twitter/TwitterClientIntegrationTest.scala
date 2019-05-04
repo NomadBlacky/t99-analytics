@@ -1,10 +1,19 @@
 package t99.twitter
 import java.time.Instant
 
-import org.scalatest.{AsyncFunSpec, MustMatchers}
+import com.amazonaws.xray.AWSXRay
+import org.scalatest.{AsyncFunSpec, BeforeAndAfterAll, MustMatchers}
 import t99.twitter.model.{Tweet, TweetId, TweetMedia}
 
-class TwitterClientIntegrationTest extends AsyncFunSpec with MustMatchers {
+class TwitterClientIntegrationTest extends AsyncFunSpec with MustMatchers with BeforeAndAfterAll {
+
+  override protected def beforeAll(): Unit = {
+    AWSXRay.getGlobalRecorder.beginSegment("Dummy segment")
+  }
+
+  override protected def afterAll(): Unit = {
+    AWSXRay.getGlobalRecorder.endSegment()
+  }
 
   describe("getTweet") {
     it("should request to Twitter API and return a tweet") {
