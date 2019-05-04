@@ -1,3 +1,4 @@
+import sbtassembly.Log4j2MergeStrategy
 import sbtrelease.Version
 
 val versions = new {
