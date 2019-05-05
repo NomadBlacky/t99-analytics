@@ -2,10 +2,11 @@ package t99.lambda
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent
 import com.amazonaws.services.lambda.runtime.{Context, RequestHandler}
-import com.amazonaws.services.rekognition.AmazonRekognitionClientBuilder
 import com.github.j5ik2o.reactive.aws.dynamodb.DynamoDbAsyncClient
+import com.github.j5ik2o.reactive.aws.rekognition.RekognitionAsyncClient
 import org.apache.logging.log4j.LogManager
 import software.amazon.awssdk.services.dynamodb.{DynamoDbAsyncClient => JavaDynamoDbAsyncClient}
+import software.amazon.awssdk.services.rekognition.{RekognitionAsyncClient => JavaRekognitionAsyncClient}
 import t99.dynamodb.T99DynamoDbClient
 import t99.lambda.RequestHelper._
 import t99.rekognition.RekognitionClient
@@ -35,7 +36,7 @@ class Handler(
   def this() = this(
     sys.env("AUTH_TOKEN"),
     new TwitterClient(sys.env("TWITTER_OAUTH2_BEARER_TOKEN")),
-    new RekognitionClient(AmazonRekognitionClientBuilder.defaultClient()),
+    new RekognitionClient(RekognitionAsyncClient(JavaRekognitionAsyncClient.create())),
     new T99ResultExtractor,
     new T99DynamoDbClient(DynamoDbAsyncClient(JavaDynamoDbAsyncClient.create()), sys.env("RESULT_TABLE_NAME"))
   )

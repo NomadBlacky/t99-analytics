@@ -5,7 +5,7 @@ import scala.util.Try
 
 class T99ResultExtractor {
   def extract(detection: DetectedTextResults): T99Result = {
-    val texts = detection.texts.map(_.getDetectedText)
+    val texts = detection.texts.map(_.detectedText())
     val resultValues = for {
       extractor <- T99ResultValueExtractors.all
       value     <- extractor.extract(texts).toSeq
