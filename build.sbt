@@ -31,7 +31,7 @@ lazy val app = (project in file("."))
       "com.amazonaws"     % "aws-lambda-java-events"                     % "2.2.5",
       "com.amazonaws"     % "aws-lambda-java-core"                       % "1.2.0",
       "com.amazonaws"     % "aws-java-sdk-rekognition"                   % versions.awsJavaSdk,
-      "com.github.j5ik2o" %% "reactive-aws-dynamodb-core"                % "1.1.0",
+      "com.github.j5ik2o" %% "reactive-aws-dynamodb-core"                % "1.1.3",
       "com.lihaoyi"       %% "upickle"                                   % "0.7.1",
       "com.amazonaws"     % "aws-xray-recorder-sdk-core"                 % versions.xray,
       "com.amazonaws"     % "aws-xray-recorder-sdk-aws-sdk"              % versions.xray,
