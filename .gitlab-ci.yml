@@ -1,6 +1,7 @@
 stages:
   - test
   - deploy
+  - tf_apply
 
 test & assembly:
   stage: test
@@ -38,6 +39,25 @@ scalafmt:
     - .sbt
     - .ivy2
 
+terraform plan:
+  stage: test
+  image:
+    name: hashicorp/terraform:0.11.13
+    entrypoint: [""]
+  script:
+    - cd terraform
+    - terraform init
+    - terraform fmt -check=true -diff=true
+    - terraform validate
+    - terraform plan
+  cache:
+    paths:
+      - terraform/.terrafrom
+  artifacts:
+    paths:
+      - terraform/.terraform
+    expire_in: 1 week
+
 deploy prod:
   stage: deploy
   image:
@@ -53,5 +73,18 @@ deploy prod:
   cache:
     paths:
       - node_modules/
+  only:
+    - master
+
+terraform apply:
+  stage: tf_apply
+  dependencies:
+    - terraform plan
+  image:
+    name: hashicorp/terraform:0.11.13
+    entrypoint: [""]
+  script:
+    - cd terraform
+    - terraform apply
   only:
     - master
