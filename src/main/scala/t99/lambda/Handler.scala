@@ -21,6 +21,7 @@ import scala.concurrent.{Await, Future}
 import scala.util.{Failure, Success}
 
 class Handler(
+    env: String,
     validAuthToken: String,
     twitterClient: TwitterClient,
     rekognitionClient: RekognitionClient,
@@ -28,12 +29,13 @@ class Handler(
     dynamoDbClient: T99DynamoDbClient
 ) extends RequestHandler[APIGatewayProxyRequestEvent, Response] {
 
-  private val logger = LogManager.getLogger(getClass)
+  private[this] val logger = LogManager.getLogger(getClass)
 
   /**
     * Default constructor for Lambda.
     */
   def this() = this(
+    sys.env.getOrElse("ENV", "dev"),
     sys.env("AUTH_TOKEN"),
     new TwitterClient(sys.env("TWITTER_OAUTH2_BEARER_TOKEN")),
     new RekognitionClient(RekognitionAsyncClient(JavaRekognitionAsyncClient.create())),
@@ -42,6 +44,8 @@ class Handler(
   )
 
   def handleRequest(input: APIGatewayProxyRequestEvent, context: Context): Response = {
+    implicit val metricsLogger: MetricsLogger = MetricsLogger("t99", env, context)
+
     logger.info(input.toString)
 
     val resultF: Future[Response] = {
@@ -74,7 +78,7 @@ class Handler(
     if (token == validAuthToken) Future.successful(Unit)
     else Future.failed(InvalidTokenException())
 
-  private def handleInternal(body: RequestBody, context: Context): Future[Response] =
+  private def handleInternal(body: RequestBody, context: Context)(implicit ml: MetricsLogger): Future[Response] =
     for {
       tweet           <- twitterClient.getTweet(body.tweetId)
       images          <- twitterClient.getImages(tweet)

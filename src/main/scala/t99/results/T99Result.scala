@@ -22,12 +22,13 @@ case class T99Result(values: Seq[T99ResultValue]) {
     T99Result(values.toSeq)
   }
 
-  def sendMetrics(createdAt: Instant): Unit = T99ResultValueType.allTypes.foreach { typ =>
-    values
-      .find(_.resultType == typ)
-      .fold(MetricsLogger.send(s"${typ.name}_missing", 1, "count", createdAt))(
-        rv => MetricsLogger.send(s"${typ.name}_value", rv.value, "gauge", createdAt)
-      )
+  def sendMetrics(createdAt: Instant)(implicit logger: MetricsLogger): Unit = T99ResultValueType.allTypes.foreach {
+    typ =>
+      values
+        .find(_.resultType == typ)
+        .fold(logger.send(s"${typ.name}_missing", 1, "count", createdAt))(
+          rv => logger.send(s"${typ.name}_value", rv.value, "gauge", createdAt)
+        )
   }
 
   def toMap: Map[String, Int] = values.map(r => r.resultType.name -> r.value).toMap

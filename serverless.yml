@@ -28,6 +28,7 @@ functions:
       AUTH_TOKEN: ${env:T99_AUTH_TOKEN}
       TWITTER_OAUTH2_BEARER_TOKEN: ${env:T99_TWITTER_OAUTH2_BEARER_TOKEN}
       RESULT_TABLE_NAME: ${self:resources.Resources.t99ResultTable.Properties.TableName}
+      ENV: ${self:provider.stage}
 
 resources:
   Resources:

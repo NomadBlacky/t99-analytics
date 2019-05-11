@@ -24,6 +24,7 @@ class HandlerSpec extends AsyncFunSpec with MustMatchers with MockitoSugar {
 
     it("must return a 401 response when authToken is invalid") {
       val handler = new Handler(
+        "debug",
         "valid token",
         mock[TwitterClient],
         mock[RekognitionClient],
@@ -98,7 +99,7 @@ class HandlerSpec extends AsyncFunSpec with MustMatchers with MockitoSugar {
           when(m.putResult(any(), any())).thenReturn(Future.successful(res))
           m
         }
-        new Handler("valid token", mockTwitterClient, mockRekognitionClient, mockExtractor, mockDynamoDbClient)
+        new Handler("debug", "valid token", mockTwitterClient, mockRekognitionClient, mockExtractor, mockDynamoDbClient)
       }
       val body =
         """{
