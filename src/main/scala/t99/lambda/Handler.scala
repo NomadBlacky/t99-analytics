@@ -12,6 +12,7 @@ import t99.lambda.RequestHelper._
 import t99.rekognition.RekognitionClient
 import t99.results.T99ResultExtractor
 import t99.twitter.TwitterClient
+import t99.twitter.model.Tweet
 import utils.SnakePickle
 
 import scala.collection.JavaConverters._
@@ -78,9 +79,10 @@ class Handler(
     if (token == validAuthToken) Future.successful(Unit)
     else Future.failed(InvalidTokenException())
 
-  private def handleInternal(body: RequestBody, context: Context)(implicit ml: MetricsLogger): Future[Response] =
-    for {
+  private def handleInternal(body: RequestBody, context: Context)(implicit ml: MetricsLogger): Future[Response] = {
+    val fu = for {
       tweet           <- twitterClient.getTweet(body.tweetId)
+      _               <- hasImages(tweet)
       images          <- twitterClient.getImages(tweet)
       detectedResults <- Future.traverse(images)(rekognitionClient.detectTexts(_))
       t99Results      <- Future.traverse(detectedResults)(r => Future.successful(resultExtractor.extract(r)))
@@ -91,6 +93,21 @@ class Handler(
     } yield {
       Response(200, resultJson, Map("Content-Type" -> "application/json").asJava)
     }
+
+    fu.recover {
+      case TweetHasNoImagesException(tweet) =>
+        Response(
+          200,
+          s"""{"message":"Tweet ${tweet.id.value} has no images."}""",
+          Map("Content-Type" -> "application/json").asJava
+        )
+    }
+  }
+
+  private def hasImages(tweet: Tweet): Future[Unit] =
+    if (tweet.photos.nonEmpty) Future.successful(())
+    else Future.failed(TweetHasNoImagesException(tweet))
 }
 
-case class InvalidTokenException() extends Throwable
+case class InvalidTokenException()                 extends Throwable
+case class TweetHasNoImagesException(tweet: Tweet) extends Throwable

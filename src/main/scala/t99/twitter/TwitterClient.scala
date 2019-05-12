@@ -28,8 +28,8 @@ class TwitterClient(oauth2Token: String, http: HttpClient = HttpClient) {
       upickle.default.read[Tweet](body)
     }
 
-  def getImages(tweet: Tweet)(implicit ec: ExecutionContext): Future[Seq[T99Image]] =
-    Future.traverse(tweet.medias) { media =>
+  def getImages(tweet: Tweet)(implicit ec: ExecutionContext): Future[Seq[T99Image]] = {
+    Future.traverse(tweet.photos) { media =>
       val request = new HttpGet(media.mediaUrlHttps)
       Future {
         val response = http.execute(request)
@@ -37,6 +37,7 @@ class TwitterClient(oauth2Token: String, http: HttpClient = HttpClient) {
         T99Image(image)
       }
     }
+  }
 }
 
 object HttpClient extends HttpClient {

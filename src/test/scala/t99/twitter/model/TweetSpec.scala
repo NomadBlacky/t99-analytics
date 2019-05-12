@@ -16,8 +16,8 @@ class TweetSpec extends FunSpec with MustMatchers {
       val expect = Tweet(
         TweetId("1104057231635431424"),
         Seq(
-          TweetMedia("photo", "https://pbs.twimg.com/media/D1JmM2hVsAAxA4O.jpg"),
-          TweetMedia("photo", "https://pbs.twimg.com/media/D1JmM2XUYAABN9B.jpg")
+          TweetMedia(TweetMediaType.Photo, "https://pbs.twimg.com/media/D1JmM2hVsAAxA4O.jpg"),
+          TweetMedia(TweetMediaType.Photo, "https://pbs.twimg.com/media/D1JmM2XUYAABN9B.jpg")
         ),
         Instant.parse("2019-03-08T16:32:11Z")
       )

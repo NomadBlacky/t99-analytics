@@ -7,7 +7,7 @@ import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import org.scalatest.{AsyncFunSpec, MustMatchers}
 import org.scalatestplus.mockito.MockitoSugar
-import t99.twitter.model.{Tweet, TweetId, TweetMedia}
+import t99.twitter.model.{Tweet, TweetId, TweetMedia, TweetMediaType}
 
 import scala.io.Source
 
@@ -44,8 +44,8 @@ class TwitterClientSpec extends AsyncFunSpec with MustMatchers with MockitoSugar
       val expect = Tweet(
         TweetId("1104057231635431424"),
         Seq(
-          TweetMedia("photo", "https://pbs.twimg.com/media/D1JmM2hVsAAxA4O.jpg"),
-          TweetMedia("photo", "https://pbs.twimg.com/media/D1JmM2XUYAABN9B.jpg")
+          TweetMedia(TweetMediaType.Photo, "https://pbs.twimg.com/media/D1JmM2hVsAAxA4O.jpg"),
+          TweetMedia(TweetMediaType.Photo, "https://pbs.twimg.com/media/D1JmM2XUYAABN9B.jpg")
         ),
         Instant.parse("2019-03-08T16:32:11Z")
       )
