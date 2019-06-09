@@ -2,7 +2,6 @@ package t99.lambda
 import java.time.Instant
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent
-import com.amazonaws.services.lambda.runtime.{ClientContext, CognitoIdentity, Context, LambdaLogger}
 import org.mockito.Answers
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
@@ -162,22 +161,5 @@ class HandlerSpec extends AsyncFunSpec with MustMatchers with MockitoSugar {
         Map("Content-Type" -> "application/json").asJava
       )
     }
-  }
-}
-
-case class TestContext() extends Context with MockitoSugar {
-  def getAwsRequestId: String         = "requestId"
-  def getLogGroupName: String         = "logGroupName"
-  def getLogStreamName: String        = "logStreamName"
-  def getFunctionName: String         = "functionName"
-  def getFunctionVersion: String      = "functionVersion"
-  def getInvokedFunctionArn: String   = "invokedFunctionArn"
-  def getIdentity: CognitoIdentity    = mock[CognitoIdentity]
-  def getClientContext: ClientContext = mock[ClientContext]
-  def getRemainingTimeInMillis: Int   = 1000
-  def getMemoryLimitInMB: Int         = 1024
-  def getLogger: LambdaLogger = new LambdaLogger {
-    override def log(message: String): Unit      = println(message)
-    override def log(message: Array[Byte]): Unit = println(message)
   }
 }
