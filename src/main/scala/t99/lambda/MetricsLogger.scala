@@ -6,7 +6,12 @@ import com.amazonaws.services.lambda.runtime.Context
 class MetricsLogger private (namePrefix: String, tags: Seq[String]) {
   private[this] val prefix = if (namePrefix.isEmpty) "" else s"${namePrefix}_"
 
-  private[lambda] def buildDogStatsDFormat[N: Numeric](name: String, value: N, unit: String, timestamp: Instant): String =
+  private[lambda] def buildDogStatsDFormat[N: Numeric](
+      name: String,
+      value: N,
+      unit: String,
+      timestamp: Instant
+  ): String =
     s"MONITORING|${timestamp.getEpochSecond}|$value|$unit|$prefix$name|#${tags.mkString(",")}"
 
   def send[N: Numeric](name: String, value: N, unit: String, timestamp: Instant = Instant.now()): Unit =
